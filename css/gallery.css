@@ -1,0 +1,17 @@
+/*
+Created by Eric Sadowski
+http://www.ericsadowski.com/
+*/
+
+@import url("reset.css");
+
+.galleryDiv {
+	float: left;
+}
+.galleryDiv a {
+	display: block;
+	margin-top: 5px;
+}
+.galleryDiv img {
+	border: 1px solid #EEE;
+}
