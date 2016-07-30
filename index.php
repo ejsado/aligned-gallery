@@ -24,8 +24,9 @@
 					'jpg' => 'image/jpeg',
 					'jpeg' => 'image/jpeg'
 				);
+				$imageDirectory = 'images';
 				// create array of file names using folder containing the images to be the gallery
-				$imageFiles = scandir('images');
+				$imageFiles = scandir($imageDirectory);
 				// randomize the order of the images
 				shuffle($imageFiles);
 				// uncomment line below to limit the number of images to load
@@ -35,9 +36,9 @@
 				foreach($imageFiles as $entry) {
 					if (!is_dir($entry)) {
 						// check if the file name has the correct extention
-						if (in_array(mime_content_type('images/' . $entry), $imageTypes)) {
+						if (in_array(mime_content_type($imageDirectory . '/' . $entry), $imageTypes)) {
 							// get the image height and width
-							list($imageWidth, $imageHeight) = getimagesize('images/' . $entry);
+							list($imageWidth, $imageHeight) = getimagesize($imageDirectory . '/' . $entry);
 							// calculate the resized width based on the baseHeight
 							$aspect = $baseHeight / $imageHeight;
 							$newWidth = $imageWidth * $aspect;
@@ -46,7 +47,7 @@
 							// id is for future use?
 							// use data-original instead of src for lazy loading plugin
 							// data-resizedwidth is used in the javascript to reset the image size
-							echo '<div class="galleryDiv" id="galleryImage-' . $i . '"><a href="images/' . $entry . '"><img  src="1x1-grey.png" data-original="images/' . $entry . '" data-resizedwidth="' . $newWidth . '" alt="image" style="width: ' . $newWidth . 'px; height: ' . $baseHeight . 'px;"></a></div>';
+							echo '<div class="galleryDiv" id="galleryImage-' . $i . '"><a href="images/' . $entry . '"><img  src="1x1-grey.png" data-original="' . $imageDirectory . '/' . $entry . '" data-resizedwidth="' . $newWidth . '" alt="image" style="width: ' . $newWidth . 'px; height: ' . $baseHeight . 'px;"></a></div>';
 							$i += 1;
 						}
 					}
