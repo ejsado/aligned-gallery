@@ -13,7 +13,7 @@
 			Created by Eric Sadowski
 			http://www.ericsadowski.com/
 		-->
-		<div class="container myGallery">
+		<div id="myGallery" class="container">
 			<?php
 				// set the desired approximate height of each row in pixels
 				$baseHeight = 200;
@@ -58,7 +58,7 @@
 			// this works because the image size is stored in the css
 			$(document).ready(function() {
 				// lazy load plugin initialization
-				$(".myGallery .galleryDiv img").lazyload();
+				$("#myGallery .galleryDiv img").lazyload();
 				// js gallery initialization
 				initializeGallery("myGallery", <?php echo $baseHeight; ?>);
 			});

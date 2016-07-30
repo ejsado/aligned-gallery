@@ -21,11 +21,11 @@ var delay = (function() {
 	};
 })();
 // reset the image sizes back to the startingHeight and calculated width
-function resetImageSize(uniqueGalleryClass, startingHeight) {
+function resetImageSize(uniqueGalleryId, startingHeight) {
 	// strip classes so new rows can be created
-	$(uniqueGalleryClass + " .galleryDiv").attr("class", "galleryDiv");
+	$(uniqueGalleryId + " .galleryDiv").attr("class", "galleryDiv");
 	// reset image size to startingHeight and resizedwidth that was stored in data- attribute
-	$(uniqueGalleryClass + " img").each(function() {
+	$(uniqueGalleryId + " img").each(function() {
 		$(this).height(startingHeight);
 		$(this).width($(this).data("resizedwidth"));
 	});
@@ -35,11 +35,11 @@ function resetImageSize(uniqueGalleryClass, startingHeight) {
 // label images with row numbers based on container width
 function createRows(uniqueGalleryName, startingHeight) {
 	// calculate and store the width of the gallery container
-	var windowWidth = $("." + uniqueGalleryName).width();
+	var windowWidth = $("#" + uniqueGalleryName).width();
 	var rowNum = 1;
 	var rowWidth = 0;
 	// for each .galleryDiv
-	$("." + uniqueGalleryName + " .galleryDiv").each(function() {
+	$("#" + uniqueGalleryName + " .galleryDiv").each(function() {
 		var elementWidth = $(this).width();
 		// add div widths
 		rowWidth += elementWidth;
@@ -52,17 +52,17 @@ function createRows(uniqueGalleryName, startingHeight) {
 		$(this).addClass(uniqueGalleryName + "-row-" + rowNum);
 	});
 	// pass an array of things to be used
-	return ["." + uniqueGalleryName, rowNum, windowWidth, startingHeight];
+	return [uniqueGalleryName, rowNum, windowWidth, startingHeight];
 }
 // resize the images to approximately fill each row
 function alignImages(galleryProperties) {
-	var uniqueGalleryClass = galleryProperties[0];
+	var uniqueGalleryName = galleryProperties[0];
 	var rowNum = galleryProperties[1];
 	var windowWidth = galleryProperties[2];
 	var startingHeight = galleryProperties[3];
 	// calculate the width of the last row
 	var lastRowWidth = 0;
-	$(uniqueGalleryClass + "-row-" + rowNum).each(function() {
+	$("." + uniqueGalleryName + "-row-" + rowNum).each(function() {
 		lastRowWidth += $(this).outerWidth(true) + 6; // adding 6 creates space between the images
 	});
 	// if the last row is wide enough, resize the images
@@ -78,23 +78,23 @@ function alignImages(galleryProperties) {
 		var newRowWidth = windowWidth - 1;
 		// calculate the actual width of the row
 		// use outerWidth(true) to include padding, margins, border
-		$(uniqueGalleryClass + "-row-" + i).each(function() {
+		$("." + uniqueGalleryName + "-row-" + i).each(function() {
 			rowWidth += $(this).outerWidth(true) + 6; // adding 6 creates space between the images
 		});
 		// calculate the aspect ratio so the row will fill the container width
 		var aspect = newRowWidth / rowWidth;
 		// apply the calculations
-		$(uniqueGalleryClass + "-row-" + i +" img").each(function() {
+		$("." + uniqueGalleryName + "-row-" + i +" img").each(function() {
 			$(this).height(Math.floor(startingHeight * aspect));
 			$(this).width(Math.floor($(this).width() * aspect));
 		});
 	}
 	// pass multiple values
-	return [uniqueGalleryClass, rowNum, windowWidth, startingHeight, resizeLastRow];
+	return [uniqueGalleryName, rowNum, windowWidth, startingHeight, resizeLastRow];
 }
 // add margins so the images are evenly distributed in each row
 function distributeImages(galleryProperties) {
-	var uniqueGalleryClass = galleryProperties[0];
+	var uniqueGalleryName = galleryProperties[0];
 	var rowNum = galleryProperties[1];
 	var windowWidth = galleryProperties[2];
 	var startingHeight = galleryProperties[3];
@@ -107,19 +107,19 @@ function distributeImages(galleryProperties) {
 		// calculate the actual width of the row
 		// use outerWidth(true) to include padding, margins, border
 		// count the number of images in the row
-		$(uniqueGalleryClass + "-row-" + i).each(function() {
+		$("." + uniqueGalleryName + "-row-" + i).each(function() {
 			rowWidth += $(this).outerWidth(true);
 			imgCount += 1;
 		});
 		// divide the leftover row space by the number of images
 		var imgMargin = Math.floor((newRowWidth - rowWidth) / imgCount);
 		// apply this to each image
-		$(uniqueGalleryClass + "-row-" + i).css("margin-left", imgMargin);
+		$("." + uniqueGalleryName + "-row-" + i).css("margin-left", imgMargin);
 	}
 	if (!resizeLastRow) {
 		// distribute the last row with 5px because the last row is not full
 		var lastRowNum = rowNum + 1;
-		$(uniqueGalleryClass + "-row-" + lastRowNum).css("margin-left", 5);
+		$("." + uniqueGalleryName + "-row-" + lastRowNum).css("margin-left", 5);
 	}
 }
 // used to pass the gallery name and starting image height
@@ -127,21 +127,21 @@ function initializeGallery(uniqueGalleryName, startingHeight) {
 	// create rows, align the images, then distribute them
 	distributeImages(alignImages(createRows(uniqueGalleryName, startingHeight)));
 	// record the current width of the container
-	var previousWidth = $("." + uniqueGalleryName).width();
+	var previousWidth = $("#" + uniqueGalleryName).width();
 	// runs everytime the window resizes
 	$(window).resize(function() {
 		// delay by 100 milliseconds
 		delay(function() {
 			// compare the current width of the container to the recorded width
 			// if the width of the container has changed
-			if ($("." + uniqueGalleryName).width() != previousWidth) {
+			if ($("#" + uniqueGalleryName).width() != previousWidth) {
 				// reset the images so that new rows may be created
 				// the images do not scale in size to the container, they are reorganized according to it
-				resetImageSize("." + uniqueGalleryName, startingHeight);
+				resetImageSize("#" + uniqueGalleryName, startingHeight);
 				// create rows, align the images, then distribute them
 				distributeImages(alignImages(createRows(uniqueGalleryName, startingHeight)));
 				// record the new width of the container
-				previousWidth = $("." + uniqueGalleryName).width();
+				previousWidth = $("#" + uniqueGalleryName).width();
 			}
 		}, 100);
 	});
