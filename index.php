@@ -47,7 +47,7 @@
 							// id is for future use?
 							// use data-original instead of src for lazy loading plugin
 							// data-resizedwidth is used in the javascript to reset the image size
-							echo '<div class="galleryDiv" id="galleryImage-' . $i . '"><a href="images/' . $entry . '"><img  src="1x1-grey.png" data-original="' . $imageDirectory . '/' . $entry . '" data-resizedwidth="' . $newWidth . '" alt="image" style="width: ' . $newWidth . 'px; height: ' . $baseHeight . 'px;"></a></div>';
+							echo '<div class="galleryDiv" id="galleryImage-' . $i . '"><a href="' . $imageDirectory . '/' . $entry . '"><img  src="1x1-grey.png" data-original="' . $imageDirectory . '/' . $entry . '" data-resizedwidth="' . $newWidth . '" alt="image" style="width: ' . $newWidth . 'px; height: ' . $baseHeight . 'px;"></a></div>';
 							$i += 1;
 						}
 					}
